@@ -13,7 +13,7 @@
 \RequirePackage{etoolbox}
 \RequirePackage[table]{xcolor}
 
-\AfterEndPreamble{\printit}
+\AfterEndPreamble{\stundenzettel@printit}
 
 \pagestyle{empty}
 \setlength\parindent{0pt}
@@ -67,10 +67,6 @@
 \newcommand{\SetAnteil}[1]{\def\stundenzettel@anteil{#1}}
 \newcommand{\SetZeitraum}[1]{\def\stundenzettel@zeitraum{#1}}
 
-% \SetHoursJan{12}
-% \SetWorkJan{Foo}
-% \SetHoursExternalJan{21}
-
 \SetHoursJan{0}\SetWorkJan{}\SetHoursExternalJan{0}
 \SetHoursFeb{0}\SetWorkFeb{}\SetHoursExternalFeb{0}
 \SetHoursMar{0}\SetWorkMar{}\SetHoursExternalMar{0}
@@ -92,18 +88,7 @@
 \SetAnteil{100 \%}
 \SetZeitraum{}
 
-\newcounter{tothoursjan}
-\newcounter{tothoursfeb}
-\newcounter{tothoursmar}
-\newcounter{tothoursapr}
-\newcounter{tothoursmai}
-\newcounter{tothoursjun}
-\newcounter{tothoursjul}
-\newcounter{tothoursaug}
-\newcounter{tothourssep}
-\newcounter{tothoursokt}
-\newcounter{tothoursnov}
-\newcounter{tothoursdez}
+\newcounter{tothoursmonth}
 
 \newcounter{totreal}
 \newcounter{totextreal}
@@ -115,7 +100,20 @@
 
 \renewcommand{\arraystretch}{1.25}
 
-\newcommand{\printit}{%
+\newcommand{\stundenzettel@printline}[2]{%
+#1 \stundenzettel@year &
+\csname stundenzettel@#2@work\endcsname &
+\csname stundenzettel@#2@hours\endcsname \addtocounter{totreal}{\csname stundenzettel@#2@hours\endcsname} &
+\csname stundenzettel@#2@exthours\endcsname \addtocounter{totextreal}{\csname stundenzettel@#2@exthours\endcsname} &
+\cellcolor{Shaded}%
+\setcounter{tothoursmonth}{\csname stundenzettel@#2@hours\endcsname}%
+\addtocounter{tothoursmonth}{\csname stundenzettel@#2@exthours\endcsname}%
+\addtocounter{totmax}{\value{tothoursmonth}}
+\thetothoursmonth
+\\ \hline
+}
+
+\newcommand{\stundenzettel@printit}{%
 {\raggedleft \textbf{Stand: \today} \\}
 { \centering
 	\textbf{\underline{\large Stundennachweis}} \\
@@ -155,113 +153,18 @@ die Stundenobergrenze
 angerechnet werden
 \\ \hline
 
-Jan \stundenzettel@year & \stundenzettel@jan@work &
-\stundenzettel@jan@hours\addtocounter{totreal}{\stundenzettel@jan@hours} &
-\stundenzettel@jan@exthours\addtocounter{totextreal}{\stundenzettel@jan@exthours} &
-\cellcolor{Shaded}
-\setcounter{tothoursjan}{\stundenzettel@jan@hours}\addtocounter{tothoursjan}{\stundenzettel@jan@exthours}
-\addtocounter{totmax}{\value{tothoursjan}}
-\thetothoursjan
-\\ \hline
-
-Feb \stundenzettel@year & \stundenzettel@feb@work &
-\stundenzettel@feb@hours\addtocounter{totreal}{\stundenzettel@feb@hours} &
-\stundenzettel@feb@exthours\addtocounter{totextreal}{\stundenzettel@feb@exthours} &
-\cellcolor{Shaded}
-\setcounter{tothoursfeb}{\stundenzettel@feb@hours}\addtocounter{tothoursfeb}{\stundenzettel@feb@exthours}
-\addtocounter{totmax}{\value{tothoursfeb}}
-\thetothoursfeb
-\\ \hline
-
-M\"ar \stundenzettel@year & \stundenzettel@mar@work &
-\stundenzettel@mar@hours\addtocounter{totreal}{\stundenzettel@mar@hours} &
-\stundenzettel@mar@exthours\addtocounter{totextreal}{\stundenzettel@mar@exthours} &
-\cellcolor{Shaded}
-\setcounter{tothoursmar}{\stundenzettel@mar@hours}\addtocounter{tothoursmar}{\stundenzettel@mar@exthours}
-\addtocounter{totmax}{\value{tothoursmar}}
-\thetothoursmar
-\\ \hline
-
-Apr \stundenzettel@year & \stundenzettel@apr@work &
-\stundenzettel@apr@hours\addtocounter{totreal}{\stundenzettel@apr@hours} &
-\stundenzettel@apr@exthours\addtocounter{totextreal}{\stundenzettel@apr@exthours} &
-\cellcolor{Shaded}
-\setcounter{tothoursapr}{\stundenzettel@apr@hours}\addtocounter{tothoursapr}{\stundenzettel@apr@exthours}
-\addtocounter{totmax}{\value{tothoursapr}}
-\thetothoursapr
-\\ \hline
-
-Mai \stundenzettel@year & \stundenzettel@mai@work &
-\stundenzettel@mai@hours\addtocounter{totreal}{\stundenzettel@mai@hours} &
-\stundenzettel@mai@exthours\addtocounter{totextreal}{\stundenzettel@mai@exthours} &
-\cellcolor{Shaded}
-\setcounter{tothoursmai}{\stundenzettel@mai@hours}\addtocounter{tothoursmai}{\stundenzettel@mai@exthours}
-\addtocounter{totmax}{\value{tothoursmai}}
-\thetothoursmai
-\\ \hline
-
-Jun \stundenzettel@year & \stundenzettel@jun@work &
-\stundenzettel@jun@hours\addtocounter{totreal}{\stundenzettel@jun@hours} &
-\stundenzettel@jun@exthours\addtocounter{totextreal}{\stundenzettel@jun@exthours} &
-\cellcolor{Shaded}
-\setcounter{tothoursjun}{\stundenzettel@jun@hours}\addtocounter{tothoursjun}{\stundenzettel@jun@exthours}
-\addtocounter{totmax}{\value{tothoursjun}}
-\thetothoursjun
-\\ \hline
-
-Jul \stundenzettel@year & \stundenzettel@jul@work &
-\stundenzettel@jul@hours\addtocounter{totreal}{\stundenzettel@jul@hours} &
-\stundenzettel@jul@exthours\addtocounter{totextreal}{\stundenzettel@jul@exthours} &
-\cellcolor{Shaded}
-\setcounter{tothoursjul}{\stundenzettel@jul@hours}\addtocounter{tothoursjul}{\stundenzettel@jul@exthours}
-\addtocounter{totmax}{\value{tothoursjul}}
-\thetothoursjul
-\\ \hline
-
-Aug \stundenzettel@year & \stundenzettel@aug@work &
-\stundenzettel@aug@hours\addtocounter{totreal}{\stundenzettel@aug@hours} &
-\stundenzettel@aug@exthours\addtocounter{totextreal}{\stundenzettel@aug@exthours} &
-\cellcolor{Shaded}
-\setcounter{tothoursaug}{\stundenzettel@aug@hours}\addtocounter{tothoursaug}{\stundenzettel@aug@exthours}
-\addtocounter{totmax}{\value{tothoursaug}}
-\thetothoursaug
-\\ \hline
-
-Sep \stundenzettel@year & \stundenzettel@sep@work &
-\stundenzettel@sep@hours\addtocounter{totreal}{\stundenzettel@sep@hours} &
-\stundenzettel@sep@exthours\addtocounter{totextreal}{\stundenzettel@sep@exthours} &
-\cellcolor{Shaded}
-\setcounter{tothourssep}{\stundenzettel@sep@hours}\addtocounter{tothourssep}{\stundenzettel@sep@exthours}
-\addtocounter{totmax}{\value{tothourssep}}
-\thetothourssep
-\\ \hline
-
-Okt \stundenzettel@year & \stundenzettel@okt@work &
-\stundenzettel@okt@hours\addtocounter{totreal}{\stundenzettel@okt@hours} &
-\stundenzettel@okt@exthours\addtocounter{totextreal}{\stundenzettel@okt@exthours} &
-\cellcolor{Shaded}
-\setcounter{tothoursokt}{\stundenzettel@okt@hours}\addtocounter{tothoursokt}{\stundenzettel@okt@exthours}
-\addtocounter{totmax}{\value{tothoursokt}}
-\thetothoursokt
-\\ \hline
-
-Nov \stundenzettel@year & \stundenzettel@nov@work &
-\stundenzettel@nov@hours\addtocounter{totreal}{\stundenzettel@nov@hours} &
-\stundenzettel@nov@exthours\addtocounter{totextreal}{\stundenzettel@nov@exthours} &
-\cellcolor{Shaded}
-\setcounter{tothoursnov}{\stundenzettel@nov@hours}\addtocounter{tothoursnov}{\stundenzettel@nov@exthours}
-\addtocounter{totmax}{\value{tothoursnov}}
-\thetothoursnov
-\\ \hline
-
-Dez \stundenzettel@year & \stundenzettel@dez@work &
-\stundenzettel@dez@hours\addtocounter{totreal}{\stundenzettel@dez@hours} &
-\stundenzettel@dez@exthours\addtocounter{totextreal}{\stundenzettel@dez@exthours} &
-\cellcolor{Shaded}
-\setcounter{tothoursdez}{\stundenzettel@dez@hours}\addtocounter{tothoursdez}{\stundenzettel@dez@exthours}
-\addtocounter{totmax}{\value{tothoursdez}}
-\thetothoursdez
-\\ \hline
+\stundenzettel@printline{Jan}{jan}
+\stundenzettel@printline{Feb}{feb}
+\stundenzettel@printline{Mär}{mar}
+\stundenzettel@printline{Apr}{apr}
+\stundenzettel@printline{Mai}{mai}
+\stundenzettel@printline{Jun}{jun}
+\stundenzettel@printline{Jul}{jul}
+\stundenzettel@printline{Aug}{aug}
+\stundenzettel@printline{Sep}{sep}
+\stundenzettel@printline{Okt}{okt}
+\stundenzettel@printline{Nov}{nov}
+\stundenzettel@printline{Dez}{dez}
 
 \multicolumn{2}{l|}{} &
 \cellcolor{Marked} \thetotreal &
