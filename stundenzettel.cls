@@ -12,6 +12,8 @@
 \RequirePackage{array}
 \RequirePackage{etoolbox}
 \RequirePackage[table]{xcolor}
+\RequirePackage{xifthen}
+\RequirePackage{graphicx}
 
 \AfterEndPreamble{\stundenzettel@printit}
 
@@ -67,6 +69,8 @@
 \newcommand{\SetAnteil}[1]{\def\stundenzettel@anteil{#1}}
 \newcommand{\SetZeitraum}[1]{\def\stundenzettel@zeitraum{#1}}
 
+\newcommand{\SetSignature}[1]{\setboolean{signature}{true}\def\stundenzettel@signature{#1}}
+
 \SetHoursJan{0}\SetWorkJan{}\SetHoursExternalJan{0}
 \SetHoursFeb{0}\SetWorkFeb{}\SetHoursExternalFeb{0}
 \SetHoursMar{0}\SetWorkMar{}\SetHoursExternalMar{0}
@@ -93,6 +97,10 @@
 \newcounter{totreal}
 \newcounter{totextreal}
 \newcounter{totmax}
+
+\newboolean{signature}
+\SetSignature{}
+\setboolean{signature}{false}
 
 \setcounter{totreal}{0}
 \setcounter{totextreal}{0}
@@ -183,7 +191,7 @@ Die Mitarbeiterin/ Der Mitarbeiter wurde darauf hingewiesen, dass das Vorhaben m
 \CheckedBox{} Es wird best\"atigt, dass die angegebenen \glqq{}tats\"achlich geleisteten Arbeitsstunden\grqq{} außerhalb von Urlaubs-, Feier- und Krankheitstagen erbracht wurden.
 
 \begin{tabular}{p{10cm} p{3cm} p{10cm}}
-\rule{0pt}{1cm} && \\ \cline{1-1} \cline{3-3}
+\rule{0pt}{1cm}\ifthenelse{\boolean{signature}}{\today \hspace{1.5em} \includegraphics[height=1cm]{\stundenzettel@signature}}{} && \\ \cline{1-1} \cline{3-3}
 \textbf{Datum und Unterschrift des/der Mitarbeiter(in)s} && \textbf{Datum und Unterschrift des/der Vorhabenleiter(in)s}
 \end{tabular}
 }
