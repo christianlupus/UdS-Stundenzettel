@@ -184,7 +184,7 @@ angerechnet werden
 % \vspace{0.3cm}
 \vfill
 
-Hinweis: Die Angaben stellen subventionserhebliche Tatsachen i.S.d. § 264 StGB dar.
+Hinweis: Die Angaben stellen subventionserhebliche Tatsachen i.S.d. \S{} 264 StGB dar.
 
 Die Mitarbeiterin/ Der Mitarbeiter wurde darauf hingewiesen, dass das Vorhaben mit Finanzmitteln aus dem Europ\"aischen Fonds für regionale Entwicklung (EFRE) kofinanziert wurde.
 
