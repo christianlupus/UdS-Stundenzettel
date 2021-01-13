@@ -14,6 +14,7 @@
 \RequirePackage[table]{xcolor}
 \RequirePackage{xifthen}
 \RequirePackage{graphicx}
+\RequirePackage{enotez}
 
 \AfterEndPreamble{\stundenzettel@printit}
 
@@ -70,6 +71,7 @@
 \newcommand{\SetZeitraum}[1]{\def\stundenzettel@zeitraum{#1}}
 
 \newcommand{\SetSignature}[1]{\setboolean{signature}{true}\def\stundenzettel@signature{#1}}
+\newcommand{\SetDate}[1]{\setboolean{thedate}{true}\def\stundenzettel@thedate{#1}}
 
 \SetHoursJan{0}\SetWorkJan{}\SetHoursExternalJan{0}
 \SetHoursFeb{0}\SetWorkFeb{}\SetHoursExternalFeb{0}
@@ -102,6 +104,10 @@
 \SetSignature{}
 \setboolean{signature}{false}
 
+\newboolean{thedate}
+\SetDate{}
+\setboolean{thedate}{false}
+
 \setcounter{totreal}{0}
 \setcounter{totextreal}{0}
 \setcounter{totmax}{0}
@@ -129,7 +135,7 @@
 }
 
 \newcommand{\stundenzettel@printit}{%
-{\raggedleft \textbf{Stand: \today} \\}
+{\raggedleft \textbf{Stand: \ifthenelse{\boolean{thedate}}{\stundenzettel@thedate}{\today}} \\}
 { \centering
 	\textbf{\underline{\large Stundennachweis}} \\
 	f\"ur \textbf{nicht ausschlie\ss{}lich im Vorhaben t\"atige Mitarbeiter} \\
@@ -198,9 +204,11 @@ Die Mitarbeiterin/ Der Mitarbeiter wurde darauf hingewiesen, dass das Vorhaben m
 \CheckedBox{} Es wird best\"atigt, dass die angegebenen \glqq{}tats\"achlich geleisteten Arbeitsstunden\grqq{} außerhalb von Urlaubs-, Feier- und Krankheitstagen erbracht wurden.
 
 \begin{tabular}{p{10cm} p{3cm} p{10cm}}
-\rule{0pt}{1cm}\ifthenelse{\boolean{signature}}{\today \hspace{1.5em} \includegraphics[height=1cm]{\stundenzettel@signature}}{} && \\ \cline{1-1} \cline{3-3}
+\rule{0pt}{1cm}\ifthenelse{\boolean{signature}}{\ifthenelse{\boolean{thedate}}{\stundenzettel@thedate}{\today} \hspace{1.5em} \includegraphics[height=1cm]{\stundenzettel@signature}}{} && \\ \cline{1-1} \cline{3-3}
 \textbf{Datum und Unterschrift des/der Mitarbeiter(in)s} && \textbf{Datum und Unterschrift des/der Vorhabenleiter(in)s}
 \end{tabular}
+\pagebreak
+\printendnotes
 }
 
 \endinput
