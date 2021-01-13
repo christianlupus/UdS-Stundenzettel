@@ -109,16 +109,23 @@
 \renewcommand{\arraystretch}{1.25}
 
 \newcommand{\stundenzettel@printline}[2]{%
-#1 \stundenzettel@year &
-\csname stundenzettel@#2@work\endcsname &
-\csname stundenzettel@#2@hours\endcsname \addtocounter{totreal}{\csname stundenzettel@#2@hours\endcsname} &
-\csname stundenzettel@#2@exthours\endcsname \addtocounter{totextreal}{\csname stundenzettel@#2@exthours\endcsname} &
-\cellcolor{Shaded}%
-\setcounter{tothoursmonth}{\csname stundenzettel@#2@hours\endcsname}%
-\addtocounter{tothoursmonth}{\csname stundenzettel@#2@exthours\endcsname}%
-\addtocounter{totmax}{\value{tothoursmonth}}
-\thetothoursmonth
-\\ \hline
+\ifthenelse{
+	\equal{\csname stundenzettel@#2@work\endcsname}{} \AND
+	\(\equal{\csname stundenzettel@#2@hours\endcsname}{} \OR
+	\equal{\csname stundenzettel@#2@hours\endcsname}{0}\)
+	}%
+	{}{
+		#1 \stundenzettel@year &
+		\csname stundenzettel@#2@work\endcsname &
+		\csname stundenzettel@#2@hours\endcsname \addtocounter{totreal}{\csname stundenzettel@#2@hours\endcsname} &
+		\csname stundenzettel@#2@exthours\endcsname \addtocounter{totextreal}{\csname stundenzettel@#2@exthours\endcsname} &
+		\cellcolor{Shaded}%
+		\setcounter{tothoursmonth}{\csname stundenzettel@#2@hours\endcsname}%
+		\addtocounter{tothoursmonth}{\csname stundenzettel@#2@exthours\endcsname}%
+		\addtocounter{totmax}{\value{tothoursmonth}}
+		\thetothoursmonth
+		\\ \hline
+	}%
 }
 
 \newcommand{\stundenzettel@printit}{%
